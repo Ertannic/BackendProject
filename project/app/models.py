@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from enum import Enum
+
 
 class User(BaseModel):
     username: str
@@ -20,7 +22,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
-class TaskStatus(BaseModel):
+class TaskStatus(str, Enum):
     TODO = "todo"
     IN_PROGRESS = "in progress"
     DONE = "done"
@@ -29,17 +31,17 @@ class Task(BaseModel):
     id: str
     title: str
     description: str
-    status: str = Field(default=TaskStatus.TODO)
+    status: TaskStatus = Field(default=TaskStatus.TODO)
     createdAT: datetime
     updatedAT: datetime
 
 class TaskCreate(BaseModel):
     title: str
     description: str
-    status: Optional[str] = TaskStatus.TODO
+    status: Optional[TaskStatus] = TaskStatus.TODO
 
 class TaskUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
-    status: Optional[str]
+    status: Optional[TaskStatus]
 
